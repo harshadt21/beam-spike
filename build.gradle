@@ -12,10 +12,15 @@ plugins {
 
 repositories {
     mavenCentral()
+    // Add Confluent Maven repository to resolve Kafka-related dependencies
+    maven {
+        url 'https://packages.confluent.io/maven/'
+    }
 }
 
 application {
-    mainClass = 'com.example.App'
+    // Set the main class to your pipeline's entry point
+    mainClass = 'GroupIntoBatchesKafkaIO'
 }
 
 test {
@@ -24,10 +29,23 @@ test {
 }
 
 dependencies {
-    // App dependencies.
+    // Apache Beam SDKs
     implementation "org.apache.beam:beam-sdks-java-core:2.67.0"
     implementation "org.apache.beam:beam-runners-direct-java:2.67.0"
-    implementation "org.slf4j:slf4j-jdk14:2.0.16"
+    implementation "org.apache.beam:beam-sdks-java-io-kafka:2.67.0"
+
+    // Joda-Time for date/time handling
+    implementation "joda-time:joda-time:2.12.7"
+
+    // Gson for JSON parsing
+    implementation "com.google.code.gson:gson:2.10.1"
+
+    // SLF4J for logging (API and implementation)
+    implementation "org.slf4j:slf4j-api:2.0.16"
+    implementation "org.slf4j:slf4j-jdk14:2.0.16" // Or slf4j-simple
+
+    // Core Kafka Client library (REQUIRED for Deserializers like StringDeserializer)
+    implementation "org.apache.kafka:kafka-clients:3.5.1" // Use a version compatible with your Kafka broker
 
     // Tests dependencies.
     testImplementation "junit:junit:4.13.2"
@@ -39,7 +57,7 @@ jar {
     archiveBaseName = 'pipeline'
     destinationDirectory = file('build')
     manifest {
-        attributes 'Main-Class': 'com.example.App'
+        attributes 'Main-Class': 'GroupIntoBatchesKafkaIO' // Ensure this matches your main class
     }
     exclude 'META-INF/*.SF'
     exclude 'META-INF/*.DSA'
