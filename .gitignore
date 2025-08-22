@@ -19,3 +19,9 @@ bin/
 project/*
 !project/plugins.sbt
 .scalafmt.conf
+
+.idea
+
+gradlew
+gradlew.bat
+gradle/
