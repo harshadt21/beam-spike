@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - flink-kafka-network
+
+  broker:
+    image: confluentinc/cp-kafka:7.5.0
+    hostname: broker
+    container_name: broker
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    networks:
+      - flink-kafka-network
+
+  jobmanager:
+    image: flink:1.18.1
+    hostname: jobmanager
+    container_name: flink-jobmanager
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    volumes:
+      - ./flink-jobs:/opt/flink/flink-jobs
+      - ./flink-checkpoints:/tmp/checkpoints
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+#        execution.checkpointing.interval: 10000
+#        state.backend: filesystem
+#        state.checkpoints.dir: file:///tmp/checkpoints
+#        state.savepoints.dir: file:///tmp/savepoints
+#        taskmanager.numberOfTaskSlots: 2
+    networks:
+      - flink-kafka-network
+
+  taskmanager1:
+    image: flink:1.18.1
+    hostname: taskmanager1
+    container_name: flink-taskmanager1
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+#        taskmanager.numberOfTaskSlots: 2
+    networks:
+      - flink-kafka-network
+
+  taskmanager2:
+    image: flink:1.18.1
+    hostname: taskmanager2
+    container_name: flink-taskmanager2
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+#        taskmanager.numberOfTaskSlots: 2
+    networks:
+      - flink-kafka-network
+
+  taskmanager3:
+    image: flink:1.18.1
+    hostname: taskmanager3
+    container_name: flink-taskmanager3
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+#        taskmanager.numberOfTaskSlots: 2
+    networks:
+      - flink-kafka-network
+
+networks:
+  flink-kafka-network:
+    driver: bridge
