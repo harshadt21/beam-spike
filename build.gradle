@@ -42,7 +42,7 @@ dependencies {
 
     // Other application-specific dependencies
     implementation "joda-time:joda-time:2.12.7"
-    implementation "com.google.code.gson:gson:2.10.1"
+    implementation "com.google.code.gson:gson:2.13.1"
     implementation "org.slf4j:slf4j-api:2.0.16"
     implementation "org.slf4j:slf4j-jdk14:2.0.16"
 
