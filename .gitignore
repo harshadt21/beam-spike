@@ -25,3 +25,5 @@ project/*
 gradlew
 gradlew.bat
 gradle/
+
+flink/flink-jobs/*

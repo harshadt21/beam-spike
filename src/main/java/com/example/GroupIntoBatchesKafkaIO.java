@@ -3,6 +3,9 @@ package com.example;
 import com.google.gson.Gson;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.kafka.KafkaIO;
+import org.apache.beam.sdk.options.PipelineOptions;
+import org.apache.beam.sdk.options.PipelineOptionsFactory;
+import org.apache.beam.runners.flink.FlinkPipelineOptions;
 import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.transforms.windowing.BoundedWindow;
 import org.apache.beam.sdk.transforms.windowing.IntervalWindow;
@@ -24,7 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-class GroupIntoBatchesKafkaIO {
+public class GroupIntoBatchesKafkaIO {
 
     public static class ClickEvent implements Serializable {
         private String userId;
@@ -76,10 +79,16 @@ class GroupIntoBatchesKafkaIO {
     }
 
     public static void main(String[] args) {
-        Pipeline p = Pipeline.create();
 
-        final String kafkaBootstrapServers = "localhost:9092";
+
+        final String kafkaBootstrapServers = "broker:29092";
         final String kafkaTopic = "clickstream-events";
+
+
+        PipelineOptions options = PipelineOptionsFactory.fromArgs(args).withValidation().create();
+        options.as(FlinkPipelineOptions.class).setRunner(org.apache.beam.runners.flink.FlinkRunner.class);
+
+        Pipeline p = Pipeline.create(options);
 
         // Read from Kafka
         PCollection<KV<String, String>> kafkaRawEvents = p.apply("ReadFromKafka", KafkaIO.<String, String>read()
@@ -172,14 +181,14 @@ class GroupIntoBatchesKafkaIO {
     }
 }
 // Input events for Kafka
-//{"userId":"userA","eventType":"page_view","metadata":"{\"browser\":\"Chrome\"}","timestamp":1755782823284,"eventData":"/home"}
-//{"userId":"userA","eventType":"click","metadata":"{\"element\":\"button\"}","timestamp":1755782833183,"eventData":"add_to_cart"}
-//{"userId":"userA","eventType":"scroll","metadata":"{\"depth\":0.5}","timestamp":1755782843250,"eventData":"product_page"}
+//{"userId":"userA","eventType":"page_view","metadata":"{\"browser\":\"Chrome\"}","timestamp":1756199813292,"eventData":"/home"}
+//{"userId":"userA","eventType":"click","metadata":"{\"element\":\"button\"}","timestamp":1756199826249,"eventData":"add_to_cart"}
+//{"userId":"userA","eventType":"scroll","metadata":"{\"depth\":0.5}","timestamp":1756199837848,"eventData":"product_page"}
 //
-//{"userId":"userA","eventType":"purchase","metadata":"{\"amount\":100}","timestamp":1755782854610,"eventData":"item_id_123"}
+//{"userId":"userA","eventType":"purchase","metadata":"{\"amount\":100}","timestamp":1756199854809,"eventData":"item_id_123"}
 //
-//{"userId":"userB","eventType":"login","metadata":"{\"method\":\"email\"}","timestamp":1755783052517,"eventData":"success"}
-//{"userId":"userB","eventType":"click","metadata":"{\"element\":\"button\"}","timestamp":1755783172320,"eventData":"add_to_cart"}
+//{"userId":"userB","eventType":"login","metadata":"{\"method\":\"email\"}","timestamp":1756199379379,"eventData":"success"}
+//{"userId":"userB","eventType":"click","metadata":"{\"element\":\"button\"}","timestamp":1756199390026,"eventData":"add_to_cart"}
 //{"userId":"userB","eventType":"click","metadata":"{\"element\":\"foo\"}","timestamp":1755783229773,"eventData":"bar"}
 //{"userId":"userB","eventType":"click","metadata":"{\"element\":\"abc\"}","timestamp":1755783246867,"eventData":"efg"}
 //{"userId":"userB","eventType":"click","metadata":"{\"element\":\"ldd\"}","timestamp":1755783266498,"eventData":"fff"}
