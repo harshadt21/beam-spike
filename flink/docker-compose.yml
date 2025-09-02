@@ -49,11 +49,11 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-#        execution.checkpointing.interval: 10000
-#        state.backend: filesystem
-#        state.checkpoints.dir: file:///tmp/checkpoints
-#        state.savepoints.dir: file:///tmp/savepoints
-#        taskmanager.numberOfTaskSlots: 2
+        execution.checkpointing.interval: 10000
+        state.backend: filesystem
+        state.checkpoints.dir: file:///tmp/checkpoints
+        state.savepoints.dir: file:///tmp/savepoints
+        taskmanager.numberOfTaskSlots: 2
     networks:
       - flink-kafka-network
 
@@ -68,7 +68,7 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-#        taskmanager.numberOfTaskSlots: 2
+        taskmanager.numberOfTaskSlots: 2
     networks:
       - flink-kafka-network
 
@@ -83,7 +83,7 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-#        taskmanager.numberOfTaskSlots: 2
+        taskmanager.numberOfTaskSlots: 2
     networks:
       - flink-kafka-network
 
@@ -98,7 +98,7 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-#        taskmanager.numberOfTaskSlots: 2
+        taskmanager.numberOfTaskSlots: 2
     networks:
       - flink-kafka-network
 

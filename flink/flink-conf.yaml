@@ -1,7 +1,7 @@
 jobmanager.rpc.address: jobmanager
 taskmanager.numberOfTaskSlots: 2
 parallelism.default: 3 # Default parallelism for jobs
-state.backend: filesystem
-state.checkpoints.dir: file:///tmp/checkpoints
-state.savepoints.dir: file:///tmp/savepoints
-execution.checkpointing.interval: 10000
+#state.backend: filesystem
+#state.checkpoints.dir: file:///tmp/checkpoints
+#state.savepoints.dir: file:///tmp/savepoints
+#execution.checkpointing.interval: 10000
