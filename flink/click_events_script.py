@@ -12,10 +12,10 @@ KAFKA_TOPIC = 'clickstream-events'
 
 # Define users and their desired event publishing rate (events per minute)
 USER_EVENT_RATES = {
-    "userA": 5,  # 1 event per second
-    "userB": 5,  # 2 events per second
-    "userC": 5,  # 1 event every 2 seconds
-    "userD": 5,  # 1.5 events per second
+    "userA": 1500,  # 1 event per second
+    "userB": 1500,  # 2 events per second
+    "userC": 1500,  # 1 event every 2 seconds
+    "userD": 1500,  # 1.5 events per second
 }
 
 # --- Event Templates ---
@@ -65,14 +65,14 @@ def publish_user_events(user_id, events_per_minute, producer, topic, event_templ
             template = random.choice(event_templates[user_id])
         else:
             print(f"[{user_id}] No event templates found. Skipping.")
-            time.sleep(1)  # Avoid busy-waiting
+            time.sleep(0.1)  # Avoid busy-waiting
             continue
 
         # Create a new event dictionary from the template
         event = template.copy()
         event['userId'] = user_id
 
-        event['timestamp'] = int((datetime.now(pytz.timezone('Asia/Kolkata')) + timedelta(seconds=30)).timestamp() * 1000)
+        event['timestamp'] = 1756888538452
 
         # Convert event to JSON string (this is handled by value_serializer, so pass the dict directly)
         # event_json = json.dumps(event) # No longer needed here

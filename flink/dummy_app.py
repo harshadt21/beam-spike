@@ -19,13 +19,13 @@ limiter = Limiter(
 
 
 @app.route('/api/data', methods=['POST'])
-@limiter.limit("2 per second", override_defaults=True)
+@limiter.limit("45 per second", override_defaults=True)
 def process_data():
     """
     Accepts a JSON payload, logs it, and returns a response after a delay.
     """
     # Simulate a network delay of 200 milliseconds (0.2 seconds).
-    delay_ms = 1000
+    delay_ms = 100
     time.sleep(delay_ms / 1000)
 
     try:

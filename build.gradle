@@ -22,10 +22,20 @@ repositories {
 test {
     useJUnit()
 }
+def sparkVersion = '3.5.0'
+
 
 dependencies {
     // Core Beam SDK
     implementation "org.apache.beam:beam-sdks-java-core:2.67.0"
+
+    // Spark
+    implementation "org.apache.spark:spark-core_2.12:${sparkVersion}"
+    implementation "org.apache.spark:spark-sql_2.12:${sparkVersion}"
+
+    // Spark Kafka Connector
+    implementation "org.apache.spark:spark-sql-kafka-0-10_2.12:${sparkVersion}"
+
 
     // The Flink Runner (to run on Flink cluster)
     implementation "org.apache.beam:beam-runners-flink-1.18:2.67.0"
