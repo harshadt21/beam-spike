@@ -48,7 +48,7 @@ dependencies {
     implementation 'org.apache.flink:flink-clients:1.18.1'
 
     // Kafka clients
-    implementation "org.apache.kafka:kafka-clients:3.5.1"
+    implementation "org.apache.kafka:kafka-clients:8.0.0-ce"
 
     // Other application-specific dependencies
     implementation "joda-time:joda-time:2.12.7"
