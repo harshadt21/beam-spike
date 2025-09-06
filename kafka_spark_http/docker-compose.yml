@@ -43,7 +43,8 @@ services:
     environment:
       - SPARK_MODE=master
     volumes:
-      - ./spark-jobs:/opt/spark-jobs # <--- Add this line
+      - ./spark-jobs:/opt/spark-jobs
+      - ./spark-conf:/opt/spark/conf
     networks:
       - spark-kafka-network
 
@@ -56,10 +57,10 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
+    volumes:
+      - ./spark-conf:/opt/spark/conf
     networks:
       - spark-kafka-network
-
-
 
 networks:
   spark-kafka-network:

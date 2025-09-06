@@ -110,7 +110,7 @@ public final class KafkaToRestApiSparkJob {
                 .select("data.*");
 
         // 4. Repartition the data before sending it to the API
-        Dataset<Row> repartitionedEvents = parsedEvents.repartition(2);
+        Dataset<Row> repartitionedEvents = parsedEvents.repartition(20);
 
         // 5. Send data to the REST API using foreachBatch
         StreamingQuery query = repartitionedEvents
@@ -158,6 +158,7 @@ public final class KafkaToRestApiSparkJob {
                                 LOG.info("API call successful for event from user '{}'. Status: {}, Body: {}",
                                         event.getUserId(), response.statusCode(), response.body());
                             } catch (Exception e) {
+                                System.out.println("Api Call Failed" + e.getMessage());
                                 LOG.error("Failed to send event to API for user '{}'", event.getUserId(), e);
                             }
                         }
