@@ -85,6 +85,14 @@ If we have X tasks running, we will have to ensure
 For e.g
 
 The rest api rate limit is 40 QPS, having 3 cores will avoid overwhelming the rest api:
+
+Rest api with 40 QPS rate limit:
+    ![Screenshot 2025-09-06 at 11.13.26 AM.png](Screenshot%202025-09-06%20at%2011.13.26%E2%80%AFAM.png)
+
+Spark Cluster with 3 cores:
+    ![Screenshot 2025-09-06 at 11.17.01 AM.png](Screenshot%202025-09-06%20at%2011.17.01%E2%80%AFAM.png)
+
+Calculation to avoid exceeding rest api rate limit:
 ```
 3 cores = 3 tasks
 1 task can execute = 1000/100 = 1/0.1 = 10 calls
